@@ -25,7 +25,7 @@
 }
 
 h2 {
-    //width: map-get($with-size, default);
+    //width: map-get($width-size, default);
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -44,7 +44,7 @@ h2 {
 }
 
 hr {
-    width: map-get($with-size, smallSize);
+    width: map-get($width-size, defaultSize);
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
@@ -56,9 +56,21 @@ hr {
     flex-direction: column;
 }
 
+.msg-info {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    color: $color-primary;
+    background-color: $background-primary-hover;
+    border-color: #c3e6cb;
+    @extend %ele--center;
+}
+
 .book-grid {
     display: grid;
-    width: map-get($with-size, smallSize);
+    width: map-get($width-size, smallSize);
     grid-column-gap: 10px;
     grid-row-gap: 1em;
     grid-template-columns: 1fr;
@@ -67,6 +79,7 @@ hr {
     //justify-content: space-around;
     @include screen-md {
         grid-template-columns: repeat(2, 1fr);
+        width: map-get($width-size, defaultSize);
     }
     @include screen-lg {
         grid-template-columns: repeat(2, 1fr);
@@ -77,15 +90,38 @@ hr {
         background-color: $backgroung-default;
         color: #000;
         display: grid;
-        //width: map-get($with-size, defaultSize);
+        //width: map-get($width-size, defaultSize);
         margin-left: 1rem;
         margin-top: 1rem;
         transition: 0.3s;
         @include screen-sm {
-            width: map-get($with-size, smallSize);
+            width: map-get($width-size, smallSize);
+        }
+        &__txt {
+            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            &__icon {
+                justify-self: end;
+            }
+            &__info {
+                width: map-get($width-size, defaultSize);
+            }
         }
         &__img {
             margin: auto;
+            & img {
+                height: auto;
+                width: 125px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                @include screen-md {
+                    width: 150px;
+                }
+                @include screen-lg {
+                    width: 180px;
+                }
+            }
         }
     }
 }

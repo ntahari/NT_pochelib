@@ -1,5 +1,5 @@
 .form {
-    width: 97%;
+    width: map-get($width-size, defaultSize);
     margin-left: auto;
     margin-right: auto;
     padding-top: 1.245rem;

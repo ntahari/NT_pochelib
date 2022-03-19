@@ -1,22 +1,46 @@
 var myBooks = document.getElementById("myBooks");
 var content = document.getElementById("content");
 
+// create div for messages info
+var msgInfoContent = document.createElement("div");
+msgInfoContent.classList.add("msg-info");
+
 // creat button "ajouter"
 var addBtn = document.createElement("BUTTON");
 addBtn.appendChild(document.createTextNode("Ajouter un livre"));
 addBtn.classList.add("btn", "btn--add");
-//myBooks.appendChild(addBtn);
 myBooks.insertBefore(addBtn, myBooks.children[2]);
-//addBtn.after(document.getElementsByClassName("h2")[1]);
 
+// create books content result of search
+const resultContainer = document.createElement("div");
+resultContainer.id = "result_content";
+resultContainer.style.display = "none";
+var booksContent = document.createElement("div");
+booksContent.id = "books_content";
+booksContent.setAttribute("class", "book-grid");
+var h2booksContent = document.createElement("h2");
+h2booksContent.innerHTML = "Résultat de la recherche";
+var hrBooksContent = document.createElement("hr");
+resultContainer.insertBefore(h2booksContent, resultContainer.children[1]);
+resultContainer.insertBefore(booksContent, resultContainer.children[2]);
+resultContainer.appendChild(hrBooksContent);
+content.insertBefore(resultContainer, content.children[0]);
+
+// create my pochlist content 
+const pochlistContent = document.createElement("div");
+pochlistContent.id = "pochlist_content";
+var pochlist = document.createElement("div");
+pochlist.id = "pochlist";
+pochlist.setAttribute("class", "book-grid");
+var hrContent = document.getElementsByTagName("hr")[0];
+pochlistContent.appendChild(pochlist);
+content.appendChild(pochlistContent);
 
 
 /* creat search form */
 var formContainer = document.createElement("div");
 formContainer.id = "form_container";
 var form = document.createElement("form");
-//form.method = "POST";
-//form.action = "index.html#content";
 form.classList.add("form");
 
 // function to create field in form
@@ -62,31 +86,39 @@ cancelBtn.type = "submit";
 cancelBtn.value = "Annuler";
 cancelBtn.classList.add("btn", "btn--cancel", "invisible");
 
-// create books content 
-var booksContent = document.createElement("div");
-booksContent.id = "books_content";
-booksContent.setAttribute("class", "book-grid");
-booksContent.style.display = "none";
-var h2booksContent = document.createElement("h2");
-h2booksContent.innerHTML = "Résultat de la recherche";
-h2booksContent.style.display = "none";
-var hrContent = document.getElementsByTagName("hr")[0];
-var hrBooksContent = document.createElement("hr");
-hrBooksContent.style.display = "none";
-//booksContent.appendChild(h2booksContent);
-content.insertBefore(hrContent, content.children[0]);
-content.insertBefore(h2booksContent, content.children[1]);
-content.insertBefore(booksContent, content.children[2]);
-//booksContent.insertBefore(hrBooksContent, booksContent.children[0]);
 
-// create favorite books content 
-var pochlist = document.createElement("div");
-pochlist.id = "pochlist";
-pochlist.setAttribute("class", "book-grid");
-//content.insertBefore(pochlist, myBooks.children[3]);
-content.appendChild(pochlist);
-//pochlist.after(content.children[1]);
+// show form
+addBtn.onclick = (e) => {
+    e.preventDefault();
+    formContainer.style.display = 'block';
+    cancelBtn.style.display = 'block';
+    addBtn.style.display = 'none';
+}
 
+// hide form + search's result
+cancelBtn.onclick = (e) => {
+    e.preventDefault();
+    formContainer.style.display = 'none';
+    cancelBtn.style.display = "none";
+    resultContainer.style.display = "none";
+    resultContainer.innerHTML = "";
+    //booksContent.innerHTML = "";
+    addBtn.style.display = "block";
+}
+
+/*construct the form */
+myBooks.insertBefore(formContainer, myBooks.children[2]);
+formContainer.appendChild(form);
+form.appendChild(createField(authorLabel, authorField));
+form.appendChild(createField(titleLabel, titleField));
+form.appendChild(submitBtn);
+form.appendChild(cancelBtn);
+
+submitBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    booksContent.innerHTML = "";
+    searchBooks();
+});
 
 /* function search books from Api google books */
 function searchBooks() {
@@ -101,54 +133,70 @@ function searchBooks() {
             }
         })
         .then(function(value) {
-            //favBookContent.style.display = "none";
-            booksContent.style.display = "grid";
-            h2booksContent.style.display = "block";
-            for (var i = 0; i < value.items.length; i++) {
-                var item = value.items[i];
-                createBook(item, booksContent);
+            resultContainer.style.display = "block";
+            if (value.items === undefined) {
+                msgInfoContent.innerHTML = `<p> Aucun livre n'a été trouvé !</p>`;
+                booksContent.appendChild(msgInfoContent);
+                return;
+            } else {
+                for (var i = 0; i < value.items.length; i++) {
+                    var item = value.items[i];
+                    createBook(item, booksContent);
+                }
             }
-            hrBooksContent.style.display = "block";
-            content.insertBefore(hrBooksContent, content.children[4]);
         })
         .then(function(err) {
 
         });
+
 }
 
 /* function to create book's content */
 function createBook(book, container) {
     var bookPrev = document.createElement('div');
+    bookPrev.id = "book_prev-" + book.id;
     bookPrev.classList.add("book-grid__prev");
+    var title, author, description, img;
+
     var title = book.volumeInfo.title;
     var author = book.volumeInfo.authors;
     var description = book.volumeInfo.description;
-    var img = book.volumeInfo.imageLinks.thumbnail;
+    var img = "./images/unavailable.png";
     var iconInfo = addIcon(book.id);
     var missingInfo = "Information manquante";
 
-    if (book.volumeInfo.title === undefined) {
-        title = missingInfo;
-    }
-    if (book.volumeInfo.authors === undefined) {
-        author = missingInfo;
-    }
-    if (book.volumeInfo.description === undefined) {
+    author = book.volumeInfo.authors ?
+        book.volumeInfo.authors[0] :
+        missingInfo;
+    // limit description to 200 caracters
+    if (book.volumeInfo.description) {
+        description = book.volumeInfo.description;
+        if (description.length > 200) {
+            description = description.slice(0, 199);
+            description = description.substring(0, description.lastIndexOf(" "));
+            if (!description.endsWith(".")) {
+                description += "...";
+            }
+        }
+    } else {
         description = missingInfo;
     }
-    if (book.volumeInfo.imageLinks.thumbnail === undefined) {
+    if (book.volumeInfo.imageLinks && book.volumeInfo.imageLinks.thumbnail) {
+        img = book.volumeInfo.imageLinks.thumbnail
+    } else {
         img = "./images/unavailable.png";
     }
+
     bookPrev.innerHTML =
-        `<div class = "book-grid__prev__info"><p><b>Titre: ${title}</b></p>
+        `<div class = "book-grid__prev__txt">
+        <div class = "book-grid__prev__txt__info"><h3>Titre: ${title}</h3>
         <p><b>ID: ${book.id}</b></p>
-        <p><b>Auteur: </b>${author[0]}</p>
-        <p><b>Déscription: </b>${description.substring(0, 200)} <p></div>
-        <div class = "book-grid__prev__icon"><i id="${iconInfo}-${book.id}" class="fas fa-${iconInfo}" title=""></i></div>
-        <div class = "book-grid__prev__img"><img src = ${img}/></div>`;
-    /* <div class = "book-grid__prev__id"><p><b>ID: ${book.id}</b></p></div>
-    <div class = "book-grid__prev__author"><p><b>Auteur: </b>${author[0]}</p></div>
-    <div class = "book-grid__prev__desc"><p><b>Déscription: </b>${description.substring(0, 200)} <p></div> */
+        <p><b>Auteur: </b>${author}</p>
+        <p><b>Déscription: </b>${description} <p></div>
+        <div class = "book-grid__prev__txt__icon">
+        <i id="${iconInfo.name}-${book.id}" class="fas fa-${iconInfo.name}" title="${iconInfo.title}"></i></div>
+        </div>
+        <div class = "book-grid__prev__img"><img src = "${img}"/></div>`;
     container.appendChild(bookPrev);
 
     // create an object to contains session storage of favorite books
@@ -156,84 +204,67 @@ function createBook(book, container) {
         'id': book.id,
         volumeInfo: {
             'title': title,
-            'authors': author,
+            'author': author,
             'description': description,
             imageLinks: {
                 'thumbnail': img,
             }
         }
     }
-    if (iconInfo == "bookmark") {
+    if (iconInfo.name == "bookmark") {
         addToFavourite(book.id, favBook);
     }
-    if (iconInfo == "trash") {
+    if (iconInfo.name == "trash") {
         removeFromFavourite(book.id);
     }
-
 }
 
 // function to add icon bookmark/trash
 function addIcon(id) {
     var bookmarkEle = document.getElementById("bookmark-" + id);
-    var iconeName = "bookmark";
-    var titleIcone = "Ajouter ce livre dans ma poche'liste";
-    if (document.body.contains(bookmarkEle)) {
-        iconeName = "trash";
-        titleIcone = "Supprimer ce livre de ma poch'list";
+    var iconInfo = {
+        name: "bookmark",
+        title: "Ajouter ce livre dans ma poche'liste",
+    };
+    var bookIdsSession = sessionStorage.getItem(id);
+    if (document.body.contains(bookmarkEle) || bookIdsSession) {
+        iconInfo.name = "trash";
+        iconInfo.title = "Supprimer ce livre de ma poch'list";
     }
-    return iconeName;
+    console.log(iconInfo);
+    return iconInfo;
 }
 
 // function add book to favourite
-function addToFavourite(iconId, favBook) {
-    document.getElementById("bookmark-" + iconId).onclick = (e) => {
-        if (sessionStorage.getItem(iconId)) {
+function addToFavourite(bookId, favBook) {
+    document.getElementById("bookmark-" + bookId).addEventListener("click", (e) => {
+        e.preventDefault();
+        /* if (sessionStorage.getItem(bookId)) {
             alert("vous ne pouvez pas ajouter le même livre deux fois");
             return;
-        }
-        sessionStorage.setItem(iconId, JSON.stringify(favBook));
+        } */
+        sessionStorage.setItem(bookId, JSON.stringify(favBook));
         showFavBook();
-    };
+        /* document.getElementById("bookmark-" + bookId).style.display = "none";
+        document.getElementById("trash-" + bookId).style.display = "block"; */
+    });
 }
 // function remove book from favourite
-function removeFromFavourite(iconId) {
-    document.getElementById("trash-" + iconId).onclick = (e) => {
-        sessionStorage.removeItem(iconId);
-    };
-}
+function removeFromFavourite(bookId) {
+    var trashIcon = document.getElementById("trash-" + bookId);
+    trashIcon.addEventListener("click", (e) => {
+        e.preventDefault();
+        sessionStorage.removeItem(bookId);
+        trashIcon.parentElement.parentElement.parentElement.remove();
 
-/*construct the form */
-content.insertBefore(formContainer, content.children[0]);
-formContainer.appendChild(form);
-form.appendChild(createField(authorLabel, authorField));
-form.appendChild(createField(titleLabel, titleField));
-form.appendChild(submitBtn);
-form.appendChild(cancelBtn);
-
-submitBtn.onclick = (e) => {
-    e.preventDefault();
-    searchBooks();
-    titleField.focus();
-};
-
-// show form
-addBtn.onclick = (e) => {
-    e.preventDefault();
-    formContainer.style.display = 'block';
-    cancelBtn.style.display = 'block';
-    addBtn.style.display = 'none';
-}
-
-// hide form
-cancelBtn.onclick = (e) => {
-    e.preventDefault();
-    formContainer.style.display = 'none';
-    addBtn.style.display = "block";
-    cancelBtn.style.display = "none";
+        /* document.getElementById("bookmark-" + bookId).style.display = "block";
+        document.getElementById("trash-" + bookId).style.display = "none"; */
+    });
 }
 
 // function to show favorite books
 function showFavBook() {
+    pochlist.innerHTML = "";
     let books = Object.keys(sessionStorage);
     for (let bookId of books) {
         favBook = JSON.parse(sessionStorage.getItem(bookId));
