@@ -57,7 +57,7 @@ var authorField = document.createElement("input");
 authorField.name = "author";
 authorField.id = "author";
 authorField.type = "text";
-authorField.classList.add("field__input")
+authorField.classList.add("field__input");
 var authorLabel = document.createElement("label");
 authorLabel.setAttribute("for", "author");
 authorLabel.appendChild(document.createTextNode("Auteur"));
@@ -67,7 +67,7 @@ var titleField = document.createElement("input");
 titleField.name = "title";
 titleField.id = "title";
 titleField.type = "text";
-titleField.classList.add("field__input")
+titleField.classList.add("field__input");
 var titleLabel = document.createElement("label");
 titleLabel.setAttribute("for", "title");
 titleLabel.appendChild(document.createTextNode("Titre du livre"));
@@ -117,13 +117,19 @@ form.appendChild(cancelBtn);
 submitBtn.addEventListener("click", (e) => {
     e.preventDefault();
     booksContent.innerHTML = "";
+    var titleSearch = titleField.value;
+    var authorSearch = authorField.value;
+    if (titleSearch == "" && authorSearch == "") {
+        alert("Veuillez remplir les 2 champs !");
+        return;
+    }
     searchBooks();
 });
 
 /* function search books from Api google books */
 function searchBooks() {
-    titleSearch = document.getElementById("title").value;
-    authorSearch = document.getElementById("author").value;
+    var titleSearch = titleField.value;
+    var authorSearch = authorField.value;
     var booksUrl = "https://www.googleapis.com/books/v1/volumes?q=intitle:" + titleSearch + "+inauthor:" + authorSearch;
 
     fetch(booksUrl)
@@ -166,7 +172,7 @@ function createBook(book, container) {
     var missingInfo = "Information manquante";
 
     author = book.volumeInfo.authors ?
-        book.volumeInfo.authors[0] :
+        book.volumeInfo.authors :
         missingInfo;
     // limit description to 200 caracters
     if (book.volumeInfo.description) {
@@ -191,7 +197,7 @@ function createBook(book, container) {
         `<div class = "book-grid__prev__txt">
         <div class = "book-grid__prev__txt__info"><h3>Titre: ${title}</h3>
         <p><b>ID: ${book.id}</b></p>
-        <p><b>Auteur: </b>${author}</p>
+        <p><b>Auteur: </b>${author[0]}</p>
         <p><b>Déscription: </b>${description} <p></div>
         <div class = "book-grid__prev__txt__icon">
         <i id="${iconInfo.name}-${book.id}" class="fas fa-${iconInfo.name}" title="${iconInfo.title}"></i></div>
@@ -204,13 +210,14 @@ function createBook(book, container) {
         'id': book.id,
         volumeInfo: {
             'title': title,
-            'author': author,
+            'author[0]': author[0],
             'description': description,
             imageLinks: {
                 'thumbnail': img,
             }
         }
     }
+    console.log(favBook);
     if (iconInfo.name == "bookmark") {
         addToFavourite(book.id, favBook);
     }
@@ -239,14 +246,12 @@ function addIcon(id) {
 function addToFavourite(bookId, favBook) {
     document.getElementById("bookmark-" + bookId).addEventListener("click", (e) => {
         e.preventDefault();
-        /* if (sessionStorage.getItem(bookId)) {
+        if (sessionStorage.getItem(bookId)) {
             alert("vous ne pouvez pas ajouter le même livre deux fois");
             return;
-        } */
+        }
         sessionStorage.setItem(bookId, JSON.stringify(favBook));
         showFavBook();
-        /* document.getElementById("bookmark-" + bookId).style.display = "none";
-        document.getElementById("trash-" + bookId).style.display = "block"; */
     });
 }
 // function remove book from favourite
@@ -256,9 +261,6 @@ function removeFromFavourite(bookId) {
         e.preventDefault();
         sessionStorage.removeItem(bookId);
         trashIcon.parentElement.parentElement.parentElement.remove();
-
-        /* document.getElementById("bookmark-" + bookId).style.display = "block";
-        document.getElementById("trash-" + bookId).style.display = "none"; */
     });
 }
 
@@ -272,6 +274,5 @@ function showFavBook() {
     }
 }
 window.onload = function() {
-    //content.insertBefore(pochlist, content[2]);
     showFavBook();
 }

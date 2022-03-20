@@ -6,7 +6,7 @@
 }
 
 .fas:hover, .btn:hover {
-  background: #ccfffa;
+  background: #d4edda;
   color: #1d9a8d;
   box-shadow: 0 0 0.3em #1d9a8d;
   transform: scale(1.05);
@@ -54,8 +54,8 @@
   cursor: pointer;
 }
 .fas:hover {
-  color: #ccfffa;
-  box-shadow: 0 0 0.3em #ccfffa;
+  color: #d4edda;
+  box-shadow: 0 0 0.3em #d4edda;
 }
 
 .form {
