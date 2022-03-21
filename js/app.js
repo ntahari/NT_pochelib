@@ -99,10 +99,11 @@ addBtn.onclick = (e) => {
 cancelBtn.onclick = (e) => {
     e.preventDefault();
     formContainer.style.display = 'none';
-    cancelBtn.style.display = "none";
+    //cancelBtn.style.display = "none";
     resultContainer.style.display = "none";
     resultContainer.innerHTML = "";
-    //booksContent.innerHTML = "";
+    titleField.value = "";
+    authorField.value = "";
     addBtn.style.display = "block";
 }
 
@@ -119,7 +120,7 @@ submitBtn.addEventListener("click", (e) => {
     booksContent.innerHTML = "";
     var titleSearch = titleField.value;
     var authorSearch = authorField.value;
-    if (titleSearch == "" && authorSearch == "") {
+    if (titleSearch == "" || authorSearch == "") {
         alert("Veuillez remplir les 2 champs !");
         return;
     }
@@ -162,18 +163,20 @@ function createBook(book, container) {
     var bookPrev = document.createElement('div');
     bookPrev.id = "book_prev-" + book.id;
     bookPrev.classList.add("book-grid__prev");
-    var title, author, description, img;
 
     var title = book.volumeInfo.title;
-    var author = book.volumeInfo.authors;
+    var author, description, img;
+    /* var author = book.volumeInfo.authors;
     var description = book.volumeInfo.description;
-    var img = "./images/unavailable.png";
+    var img = "./images/unavailable.png" */
     var iconInfo = addIcon(book.id);
     var missingInfo = "Information manquante";
 
-    author = book.volumeInfo.authors ?
-        book.volumeInfo.authors :
-        missingInfo;
+    if (book.volumeInfo.authors) {
+        author = book.volumeInfo.authors[0];
+    } else {
+        author = missingInfo;
+    }
     // limit description to 200 caracters
     if (book.volumeInfo.description) {
         description = book.volumeInfo.description;
@@ -197,7 +200,7 @@ function createBook(book, container) {
         `<div class = "book-grid__prev__txt">
         <div class = "book-grid__prev__txt__info"><h3>Titre: ${title}</h3>
         <p><b>ID: ${book.id}</b></p>
-        <p><b>Auteur: </b>${author[0]}</p>
+        <p><b>Auteur: </b>${author}</p>
         <p><b>Déscription: </b>${description} <p></div>
         <div class = "book-grid__prev__txt__icon">
         <i id="${iconInfo.name}-${book.id}" class="fas fa-${iconInfo.name}" title="${iconInfo.title}"></i></div>
@@ -206,11 +209,13 @@ function createBook(book, container) {
     container.appendChild(bookPrev);
 
     // create an object to contains session storage of favorite books
-    var favBook = {
+    favBook = {
         'id': book.id,
         volumeInfo: {
             'title': title,
-            'author[0]': author[0],
+            authors: {
+                0: author
+            },
             'description': description,
             imageLinks: {
                 'thumbnail': img,
@@ -238,7 +243,6 @@ function addIcon(id) {
         iconInfo.name = "trash";
         iconInfo.title = "Supprimer ce livre de ma poch'list";
     }
-    console.log(iconInfo);
     return iconInfo;
 }
 
@@ -251,6 +255,7 @@ function addToFavourite(bookId, favBook) {
             return;
         }
         sessionStorage.setItem(bookId, JSON.stringify(favBook));
+        console.log(favBook);
         showFavBook();
     });
 }

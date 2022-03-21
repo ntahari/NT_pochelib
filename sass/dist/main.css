@@ -182,7 +182,7 @@ hr {
 }
 @media screen and (max-width: 767px) {
   .book-grid__prev {
-    width: 90%;
+    margin-left: 0;
   }
 }
 .book-grid__prev__txt {

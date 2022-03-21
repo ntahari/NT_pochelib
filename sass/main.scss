@@ -95,7 +95,8 @@ hr {
         margin-top: 1rem;
         transition: 0.3s;
         @include screen-sm {
-            width: map-get($width-size, smallSize);
+            // width: map-get($width-size, smallSize);
+            margin-left: 0;
         }
         &__txt {
             grid-template-columns: repeat(2, 1fr);
