@@ -1,0 +1,49 @@
+.btn {
+    padding: 4.5px 7.5px;
+    margin-bottom: 1.3rem;
+    border: 0.1125rem solid $color-primary;
+    width: 45%;
+    max-width: 125px;
+    color: #fff;
+    background: $color-primary;
+    font-size: 0.9rem;
+    font-weight: bolder;
+    letter-spacing: auto;
+    display: block;
+    cursor: pointer;
+    border-radius: 10rem;
+    transition: transform 300ms;
+    &:hover {
+        @extend %click--hover;
+    }
+    @include screen-sm {
+        width: 45%;
+    }
+    &--cancel {
+        background: $color-cancel;
+        color: #fff;
+        border: 0.1125rem solid $color-cancel;
+        transition: 0.3s;
+        &:hover {
+            color: $color-cancel;
+            background: $background-cancel-hover;
+        }
+    }
+    &--add {
+        @extend %ele--center;
+    }
+}
+
+// icons
+.fas {
+    color: $color-primary;
+    font-size: map-get($font-size, icon);
+    height: 14px;
+    width: 14px;
+    cursor: pointer;
+    &:hover {
+        @extend %click--hover;
+        color: $background-primary-hover;
+        box-shadow: 0 0 0.3em $background-primary-hover
+    }
+}

@@ -1,0 +1,12 @@
+* {
+    font-family: "Roboto", sans-serif;
+    @include screen-md {
+        //font-size: 105%;
+    }
+    @include screen-lg {
+        //font-size: 110%;
+    }
+}
+
+// Defining font-size
+$font-size: ( default: 0.9rem, title: 1.8rem, h2: 1.2rem, form: 1rem, icon: 1.2rem, );

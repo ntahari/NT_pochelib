@@ -1,0 +1,47 @@
+// colors
+$color-primary: #1d9a8d;
+$color-cancel: #c94754;
+$background-primary-hover: #d4edda;
+$background-cancel-hover: #ffccd1;
+$backgroung-default: #eff0f4;
+// definition width size with maps
+$width-size: ( smallSize: 90%, defaultSize: 97%, );
+
+/* Definition screen size */
+
+// Small tablets (portrait view)
+$screen-md: 768px;
+// Tablets and small desktops
+$screen-lg: 1200px;
+// definition screen media
+@mixin screen-md {
+    @media screen and (min-width: $screen-md) and (max-width: ($screen-lg - 1)) {
+        @content;
+    }
+}
+
+@mixin screen-lg {
+    @media screen and (min-width: $screen-lg) {
+        @content;
+    }
+}
+
+@mixin screen-sm {
+    @media screen and (max-width: ($screen-md - 1)) {
+        @content;
+    }
+}
+
+//element center
+%ele--center {
+    display: flex;
+    margin: auto;
+}
+
+// clickabl hover
+%click--hover {
+    background: $background-primary-hover;
+    color: $color-primary;
+    box-shadow: 0 0 0.3em $color-primary;
+    transform: scale(1.05);
+}

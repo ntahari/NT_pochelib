@@ -1,0 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+@import "./utils/variables";
+@import "./base/base";
+@import "./components/buttons";
+@import "./layout/form";
+#logo {
+    max-width: 350px;
+    width: auto;
+    height: auto;
+    margin: auto;
+}
+
+.title {
+    width: 97%;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: $backgroung-default;
+    border-radius: 5px / 5px;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #5a5656;
+    border-bottom-style: outset;
+    border-bottom-color: $backgroung-default;
+}
+
+h2 {
+    //width: map-get($width-size, default);
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border-radius: 5px / 5px;
+    font-size: map-get($font-size, h2);
+    color: black;
+}
+
+#myBooks {
+    display: flex;
+    flex-direction: column;
+}
+
+#form_container {
+    display: none;
+}
+
+hr {
+    width: map-get($width-size, defaultSize);
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    color: grey;
+}
+
+.form_container_visible {
+    display: flex;
+    flex-direction: column;
+}
+
+.msg-info {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    color: $color-primary;
+    background-color: $background-primary-hover;
+    border-color: #c3e6cb;
+    @extend %ele--center;
+}
+
+.book-grid {
+    display: grid;
+    width: map-get($width-size, smallSize);
+    grid-column-gap: 10px;
+    grid-row-gap: 1em;
+    grid-template-columns: 1fr;
+    margin: auto;
+    font-size: map-get($font-size, default);
+    //justify-content: space-around;
+    @include screen-md {
+        grid-template-columns: repeat(2, 1fr);
+        width: map-get($width-size, defaultSize);
+    }
+    @include screen-lg {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    &__prev {
+        border: 1px solid $backgroung-default;
+        padding: 10px;
+        background-color: $backgroung-default;
+        color: #000;
+        display: grid;
+        //width: map-get($width-size, defaultSize);
+        margin-left: 1rem;
+        margin-top: 1rem;
+        transition: 0.3s;
+        @include screen-sm {
+            // width: map-get($width-size, smallSize);
+            margin-left: 0;
+        }
+        &__txt {
+            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            &__icon {
+                justify-self: end;
+            }
+            &__info {
+                width: map-get($width-size, defaultSize);
+            }
+        }
+        &__img {
+            margin: auto;
+            & img {
+                height: auto;
+                width: 125px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                @include screen-md {
+                    width: 150px;
+                }
+                @include screen-lg {
+                    width: 180px;
+                }
+            }
+        }
+    }
+}
