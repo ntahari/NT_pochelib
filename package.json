@@ -1,10 +1,22 @@
 {
+    "name": "nt_pochelib",
     "version": "1.0.0",
-    "description": "",
+    "description": "1. Click on the top right button \"code\" (1).\r 2. Choose \"Download zip\" (2).\r 3. On your computer, go to the folder dowloaded.\r 4. Unzip it and open the file \"index.html\" with your browser (3).",
     "main": "app.js",
     "scripts": {
-        "sass": "sass --watch ./sass/main.scss:../css/style.css --style expanded --no-source-map"
+        "sass": "sass --watch sass/main.scss:css/style.css"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ntahari/NT_pochelib.git"
     },
     "author": "",
-    "license": "ISC"
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ntahari/NT_pochelib/issues"
+    },
+    "homepage": "https://github.com/ntahari/NT_pochelib#readme",
+    "dependencies": {
+        "node-sass": "^7.0.1"
+    }
 }
