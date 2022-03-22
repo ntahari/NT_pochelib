@@ -144,7 +144,7 @@ function searchBooks() {
             resultContainer.style.display = "block";
             if (value.items === undefined) {
                 msgInfoContent.innerHTML = `<p> Aucun livre n'a été trouvé !</p>`;
-                resultContainer.appendChild(msgInfoContent);
+                resultContainer.insertBefore(msgInfoContent, resultContainer.lastElementChild);
                 return;
             } else {
                 for (var i = 0; i < value.items.length; i++) {
