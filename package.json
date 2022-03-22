@@ -3,7 +3,7 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "sass": "sass --watch ./sass/main.scss:./css/style.css --style expanded --no-source-map"
+        "sass": "sass --watch ./sass/main.scss:../css/style.css --style expanded --no-source-map"
     },
     "author": "",
     "license": "ISC"

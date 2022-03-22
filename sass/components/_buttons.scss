@@ -43,7 +43,7 @@
     cursor: pointer;
     &:hover {
         @extend %click--hover;
-        color: $background-primary-hover;
+        color: $color-cancel;
         box-shadow: 0 0 0.3em $background-primary-hover
     }
 }

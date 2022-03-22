@@ -101,7 +101,7 @@ cancelBtn.onclick = (e) => {
     formContainer.style.display = 'none';
     //cancelBtn.style.display = "none";
     resultContainer.style.display = "none";
-    resultContainer.innerHTML = "";
+    //resultContainer.innerHTML = "";
     titleField.value = "";
     authorField.value = "";
     addBtn.style.display = "block";
@@ -131,6 +131,7 @@ submitBtn.addEventListener("click", (e) => {
 function searchBooks() {
     var titleSearch = titleField.value;
     var authorSearch = authorField.value;
+    msgInfoContent.remove();
     var booksUrl = "https://www.googleapis.com/books/v1/volumes?q=intitle:" + titleSearch + "+inauthor:" + authorSearch;
 
     fetch(booksUrl)
@@ -143,7 +144,7 @@ function searchBooks() {
             resultContainer.style.display = "block";
             if (value.items === undefined) {
                 msgInfoContent.innerHTML = `<p> Aucun livre n'a été trouvé !</p>`;
-                booksContent.appendChild(msgInfoContent);
+                resultContainer.appendChild(msgInfoContent);
                 return;
             } else {
                 for (var i = 0; i < value.items.length; i++) {
@@ -222,12 +223,13 @@ function createBook(book, container) {
             }
         }
     }
-    console.log(favBook);
-    if (iconInfo.name == "bookmark") {
-        addToFavourite(book.id, favBook);
-    }
-    if (iconInfo.name == "trash") {
-        removeFromFavourite(book.id);
+    if (iconInfo) {
+        if (iconInfo.name == "bookmark") {
+            addToFavourite(book.id, favBook);
+        }
+        if (iconInfo.name == "trash") {
+            removeFromFavourite(book.id);
+        }
     }
 }
 
@@ -255,7 +257,6 @@ function addToFavourite(bookId, favBook) {
             return;
         }
         sessionStorage.setItem(bookId, JSON.stringify(favBook));
-        console.log(favBook);
         showFavBook();
     });
 }
