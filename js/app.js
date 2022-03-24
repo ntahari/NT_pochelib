@@ -132,7 +132,8 @@ function searchBooks() {
     var titleSearch = titleField.value;
     var authorSearch = authorField.value;
     msgInfoContent.remove();
-    var booksUrl = "https://www.googleapis.com/books/v1/volumes?q=intitle:" + titleSearch + "+inauthor:" + authorSearch;
+    var booksUrl = "https://www.googleapis.com/books/v1/volumes?q=intitle:" +
+        titleSearch + "+inauthor:" + authorSearch;
 
     fetch(booksUrl)
         .then(function(res) {
@@ -156,7 +157,6 @@ function searchBooks() {
         .then(function(err) {
 
         });
-
 }
 
 /* function to create book's content */

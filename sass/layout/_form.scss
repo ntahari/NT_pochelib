@@ -18,11 +18,12 @@
         padding: 1.5px;
         width: 100%;
         box-sizing: border-box;
-        border: 0.075rem solid #1d1b1b;
+        border: 0.075rem solid $color-primary;
         border-radius: 5px/5px;
         &:focus {
-            background-color: #cad3f8;
-            border: #1a89d3;
+            background-color: $backgroung-default;
+            border: 0.25rem solid $background-primary-hover;
+            outline: $background-primary-hover;
         }
     }
 }

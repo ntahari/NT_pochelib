@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
-/* Definition screen size */
 .msg-info, .btn--add {
   display: flex;
   margin: auto;
@@ -79,12 +78,13 @@
   padding: 1.5px;
   width: 100%;
   box-sizing: border-box;
-  border: 0.075rem solid #1d1b1b;
+  border: 0.075rem solid #1d9a8d;
   border-radius: 5px/5px;
 }
 .form__field input:focus {
-  background-color: #cad3f8;
-  border: #1a89d3;
+  background-color: #eff0f4;
+  border: 0.25rem solid #d4edda;
+  outline: #d4edda;
 }
 
 #logo {
