@@ -36,7 +36,6 @@ var hrContent = document.getElementsByTagName("hr")[0];
 pochlistContent.appendChild(pochlist);
 content.appendChild(pochlistContent);
 
-
 /* creat search form */
 var formContainer = document.createElement("div");
 formContainer.id = "form_container";
@@ -86,7 +85,6 @@ cancelBtn.type = "submit";
 cancelBtn.value = "Annuler";
 cancelBtn.classList.add("btn", "btn--cancel", "invisible");
 
-
 // show form
 addBtn.onclick = (e) => {
     e.preventDefault();
@@ -99,9 +97,7 @@ addBtn.onclick = (e) => {
 cancelBtn.onclick = (e) => {
     e.preventDefault();
     formContainer.style.display = 'none';
-    //cancelBtn.style.display = "none";
     resultContainer.style.display = "none";
-    //resultContainer.innerHTML = "";
     titleField.value = "";
     authorField.value = "";
     addBtn.style.display = "block";
@@ -167,9 +163,7 @@ function createBook(book, container) {
 
     var title = book.volumeInfo.title;
     var author, description, img;
-    /* var author = book.volumeInfo.authors;
-    var description = book.volumeInfo.description;
-    var img = "./images/unavailable.png" */
+
     var iconInfo = addIcon(book.id);
     var missingInfo = "Information manquante";
 
@@ -211,18 +205,19 @@ function createBook(book, container) {
 
     // create an object to contains session storage of favorite books
     favBook = {
-        'id': book.id,
-        volumeInfo: {
-            'title': title,
-            authors: {
-                0: author
-            },
-            'description': description,
-            imageLinks: {
-                'thumbnail': img,
+            'id': book.id,
+            volumeInfo: {
+                'title': title,
+                authors: {
+                    0: author
+                },
+                'description': description,
+                imageLinks: {
+                    'thumbnail': img,
+                }
             }
         }
-    }
+        // call functions add/remove book with icons
     if (iconInfo) {
         if (iconInfo.name == "bookmark") {
             addToFavourite(book.id, favBook);
@@ -266,7 +261,7 @@ function removeFromFavourite(bookId) {
     trashIcon.addEventListener("click", (e) => {
         e.preventDefault();
         sessionStorage.removeItem(bookId);
-        trashIcon.parentElement.parentElement.parentElement.remove();
+        trashIcon.closest(".book-grid__prev").remove();
     });
 }
 
@@ -279,6 +274,7 @@ function showFavBook() {
         createBook(favBook, pochlist);
     }
 }
+//show pochlist on page refresh
 window.onload = function() {
     showFavBook();
 }
